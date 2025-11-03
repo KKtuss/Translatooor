@@ -95,17 +95,44 @@ export default function Home() {
     }
   };
 
-  // Auto-play music on mount
+  // Auto-play music on mount or first user interaction
   useEffect(() => {
-    const audio = document.getElementById("background-music") as HTMLAudioElement;
-    if (audio) {
-      audio.volume = 0.3; // Set volume to 30%
-      audio.play().catch(err => {
-        console.log("Audio autoplay prevented:", err);
-        // Autoplay might be blocked by browser, user interaction needed
+    let audio: HTMLAudioElement | null = null;
+    let hasStarted = false;
+
+    const startMusic = () => {
+      if (hasStarted) return;
+      hasStarted = true;
+      
+      audio = document.getElementById("background-music") as HTMLAudioElement;
+      if (audio) {
+        audio.volume = 0.3;
+        audio.play().catch(err => {
+          console.log("Audio play failed:", err);
+        });
+      }
+    };
+
+    // Try to start immediately (works in some contexts)
+    const immediateAudio = document.getElementById("background-music") as HTMLAudioElement;
+    if (immediateAudio) {
+      immediateAudio.volume = 0.3;
+      immediateAudio.play().then(() => {
+        hasStarted = true;
+      }).catch(() => {
+        // If autoplay fails, wait for user interaction
+        document.addEventListener("click", startMusic, { once: true });
+        document.addEventListener("touchstart", startMusic, { once: true });
+        document.addEventListener("keydown", startMusic, { once: true });
       });
     }
-  }, []);
+
+    return () => {
+      document.removeEventListener("click", startMusic);
+      document.removeEventListener("touchstart", startMusic);
+      document.removeEventListener("keydown", startMusic);
+    };
+  }, [randomMusic]);
 
   return (
     <main className="h-screen overflow-hidden bg-black text-white">
