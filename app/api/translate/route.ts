@@ -42,9 +42,19 @@ async function tryTranslateWithRetry(text: string, userPrompt: string, delay = 0
       if (typeof content === "string") {
         translation = content.trim();
       } else if (Array.isArray(content)) {
-        // If it's an array, join all text chunks
+        // If it's an array, join all text chunks (filter out image chunks)
         translation = content
-          .map(chunk => typeof chunk === "string" ? chunk : chunk.text || "")
+          .map(chunk => {
+            if (typeof chunk === "string") {
+              return chunk;
+            }
+            // Check if it's a text chunk (has 'text' property)
+            if ("text" in chunk && typeof chunk.text === "string") {
+              return chunk.text;
+            }
+            // Skip image chunks or other types
+            return "";
+          })
           .join("")
           .trim();
       }
