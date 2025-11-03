@@ -5,8 +5,8 @@ const mistral = new Mistral({
   apiKey: process.env.MISTRAL_API_KEY || "",
 });
 
-// Helper function to try translation with retry
-async function tryTranslateWithRetry(text: string, userPrompt: string, delay = 0, retries = 2): Promise<string> {
+// Helper function to try translation with retry (only mistral-medium-2508)
+async function tryTranslateWithRetry(text: string, userPrompt: string, delay = 0, retries = 8): Promise<string> {
   const model = "mistral-medium-2508";
 
   // If delay is set, wait before retrying
@@ -17,7 +17,8 @@ async function tryTranslateWithRetry(text: string, userPrompt: string, delay = 0
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
       if (attempt > 0) {
-        const waitTime = Math.min(1000 * Math.pow(2, attempt), 5000); // Exponential backoff, max 5s
+        // Longer delays for capacity issues - start at 3s, max 15s
+        const waitTime = Math.min(3000 + (attempt - 1) * 2000, 15000);
         console.log(`⏳ Retry attempt ${attempt}/${retries} after ${waitTime}ms delay...`);
         await new Promise(resolve => setTimeout(resolve, waitTime));
       }
@@ -151,7 +152,7 @@ Now translate this (output ONLY the translation, nothing else): "${text}"`;
     
     console.log("📤 Making API call to Mistral with retry logic...");
     
-    // Try translation with retry logic
+    // Try translation with retry (only mistral-medium-2508)
     let translation = await tryTranslateWithRetry(text, userPrompt);
     
     console.log("💬 Raw translation received:", translation);
@@ -190,16 +191,16 @@ Now translate this (output ONLY the translation, nothing else): "${text}"`;
       body: error?.body
     });
     
-    // Check if all models failed - try one more time with a delay
-    if (error?.message === "All models failed" || error?.statusCode === 429) {
+    // Check if all retries failed - try one more time with a longer delay
+    if (error?.message === "All retry attempts failed" || error?.statusCode === 429) {
       const errorBody = typeof error.body === 'string' ? JSON.parse(error.body) : error.body || {};
       
       if (errorBody.code === "3505" || errorBody.type === "service_tier_capacity_exceeded") {
-        console.log("⏳ All models at capacity, trying retry with delay...");
+        console.log("⏳ Model at capacity, trying extended retry with longer delays...");
         try {
-          // Retry once with delay if we have the text
+          // Retry with more attempts and delay if we have the text
           if (text && userPrompt) {
-            const translation = await tryTranslateWithRetry(text, userPrompt, 2000, 1);
+            const translation = await tryTranslateWithRetry(text, userPrompt, 5000, 5);
             
             // Clean up translation
             let cleanTranslation = translation

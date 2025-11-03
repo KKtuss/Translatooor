@@ -1,12 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [translation, setTranslation] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Generate random stats that persist
+  const stats = useMemo(() => {
+    const likes = Math.floor(Math.random() * 50000) + 1000; // Between 1k and 51k
+    const comments = Math.floor(likes / 3 * (0.8 + Math.random() * 0.4)); // ~likes/3 with some variation
+    const shares = Math.floor(comments / 2 * (0.8 + Math.random() * 0.4)); // ~comments/2 with some variation
+    return { likes, comments, shares };
+  }, []); // Empty deps means it only generates once
 
   const handleTranslate = async () => {
     if (!input.trim()) return;
@@ -195,17 +203,17 @@ export default function Home() {
               {/* Action Buttons */}
               <div className="flex flex-col items-center gap-2">
                 <img src="/Logo-stems/like.png" alt="Like" className="w-12 h-12" />
-                <span className="text-xs">0</span>
+                <span className="text-xs">{stats.likes >= 1000 ? `${(stats.likes / 1000).toFixed(1)}K` : stats.likes}</span>
               </div>
 
               <div className="flex flex-col items-center gap-2">
                 <img src="/Logo-stems/comment.png" alt="Comment" className="w-12 h-12" />
-                <span className="text-xs">0</span>
+                <span className="text-xs">{stats.comments >= 1000 ? `${(stats.comments / 1000).toFixed(1)}K` : stats.comments}</span>
               </div>
 
               <div className="flex flex-col items-center gap-2">
                 <img src="/Logo-stems/Share.png" alt="Share" className="w-12 h-12" />
-                <span className="text-xs">0</span>
+                <span className="text-xs">{stats.shares >= 1000 ? `${(stats.shares / 1000).toFixed(1)}K` : stats.shares}</span>
               </div>
             </div>
 
