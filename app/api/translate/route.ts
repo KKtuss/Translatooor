@@ -35,7 +35,19 @@ async function tryTranslateWithRetry(text: string, userPrompt: string, delay = 0
         maxTokens: 120,
       });
 
-      const translation = completion.choices[0]?.message?.content?.trim();
+      // Handle content that can be string or ContentChunk[]
+      const content = completion.choices[0]?.message?.content;
+      let translation: string = "";
+      
+      if (typeof content === "string") {
+        translation = content.trim();
+      } else if (Array.isArray(content)) {
+        // If it's an array, join all text chunks
+        translation = content
+          .map(chunk => typeof chunk === "string" ? chunk : chunk.text || "")
+          .join("")
+          .trim();
+      }
       
       // Sanity checks for valid translation
       if (!translation || translation.length < 10) {
