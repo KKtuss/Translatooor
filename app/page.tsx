@@ -128,7 +128,7 @@ export default function Home() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover md:rounded-2xl"
             >
-              <source src="/Video/background-video.mp4" type="video/mp4" />
+                  <source src="/Video/New vid.mp4" type="video/mp4" />
             </video>
             
             {/* Video Overlay Effects */}
