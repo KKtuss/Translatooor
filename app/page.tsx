@@ -1,12 +1,22 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [translation, setTranslation] = useState("");
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Random music selection that persists
+  const randomMusic = useMemo(() => {
+    const songs = [
+      "/music/kear - sh1tin (Official Music Video).mp3",
+      "/music/M-C-M AND BAPE (SLOWED).mp3",
+      "/music/EEM TRIPLIN - 100 GRAMS  MILEY CYRUS.mp3"
+    ];
+    return songs[Math.floor(Math.random() * songs.length)];
+  }, []);
 
   // Generate random stats that persist
   const stats = useMemo(() => {
@@ -85,8 +95,29 @@ export default function Home() {
     }
   };
 
+  // Auto-play music on mount
+  useEffect(() => {
+    const audio = document.getElementById("background-music") as HTMLAudioElement;
+    if (audio) {
+      audio.volume = 0.3; // Set volume to 30%
+      audio.play().catch(err => {
+        console.log("Audio autoplay prevented:", err);
+        // Autoplay might be blocked by browser, user interaction needed
+      });
+    }
+  }, []);
+
   return (
     <main className="h-screen overflow-hidden bg-black text-white">
+      {/* Background Music - Hidden audio element */}
+      <audio
+        id="background-music"
+        src={randomMusic}
+        loop
+        preload="auto"
+        className="hidden"
+      />
+      
       {/* Header Elements - Overlay on video */}
       <div className="fixed top-0 left-0 right-0 z-50 px-4 py-3 flex items-center justify-between pointer-events-none bg-gradient-to-b from-black/80 via-black/60 to-transparent md:bg-transparent">
         <div className="flex items-center gap-2 pointer-events-auto">
