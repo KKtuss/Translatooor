@@ -237,18 +237,18 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* Translation Display - Fixed Height */}
-                <div className="h-36 overflow-hidden text-center flex items-center justify-center animate-[fadeIn_0.3s_ease-out]">
+                {/* Translation Display - Flexible Height */}
+                <div className="min-h-40 max-h-52 overflow-y-auto text-center flex items-center justify-center animate-[fadeIn_0.3s_ease-out] py-3 no-scrollbar">
                   {loading ? (
-                    <p className="text-white text-2xl md:text-3xl leading-tight font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] px-4" style={{ fontFamily: 'TikTok Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+                    <p className="text-white text-2xl md:text-3xl leading-snug font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] px-4" style={{ fontFamily: 'TikTok Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
                       ...
                     </p>
                   ) : translation ? (
-                    <p className="text-white text-2xl md:text-3xl leading-tight font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] px-4" style={{ fontFamily: 'TikTok Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+                    <p className="text-white text-2xl md:text-3xl leading-snug font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] px-4" style={{ fontFamily: 'TikTok Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
                       {translation}
                     </p>
                   ) : (
-                    <p className="text-gray-300 text-2xl md:text-3xl leading-tight font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] px-4" style={{ fontFamily: 'TikTok Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+                    <p className="text-gray-300 text-2xl md:text-3xl leading-snug font-bold drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)] px-4" style={{ fontFamily: 'TikTok Sans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
                       one ignored dm away from a breakdown fr 😭
                     </p>
                   )}
