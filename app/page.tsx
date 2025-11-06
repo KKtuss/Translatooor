@@ -18,6 +18,15 @@ export default function Home() {
     return songs[Math.floor(Math.random() * songs.length)];
   }, []);
 
+  // Random video selection that persists
+  const randomVideo = useMemo(() => {
+    const videos = [
+      "/Video/New vid.mp4",
+      "/Video/minecraft gameplay.mp4"
+    ];
+    return videos[Math.floor(Math.random() * videos.length)];
+  }, []);
+
   // Generate random stats that persist
   const stats = useMemo(() => {
     const likes = Math.floor(Math.random() * 50000) + 1000; // Between 1k and 51k
@@ -186,7 +195,7 @@ export default function Home() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover md:rounded-2xl"
             >
-                  <source src="/Video/New vid.mp4" type="video/mp4" />
+                  <source src={randomVideo} type="video/mp4" />
             </video>
             
             {/* Video Overlay Effects */}

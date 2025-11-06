@@ -38,8 +38,9 @@ next-env.d.ts
 # Large video files (too big for GitHub, must be added separately)
 /Video/
 /public/Video/*.mp4
-# Exception: New vid.mp4 is compressed and under 100MB
+# Exception: New vid.mp4 and minecraft gameplay.mp4 are compressed and under 100MB
 !/public/Video/New vid.mp4
+!/public/Video/minecraft gameplay.mp4
 
 
 
