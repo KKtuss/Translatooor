@@ -9,8 +9,10 @@ const port = process.env.PORT || 3000
 const app = next({ dev, hostname, port })
 const handle = app.getRequestHandler()
 
+let server = null
+
 app.prepare().then(() => {
-  createServer(async (req, res) => {
+  server = createServer(async (req, res) => {
     try {
       const parsedUrl = parse(req.url, true)
       await handle(req, res, parsedUrl)
@@ -19,9 +21,38 @@ app.prepare().then(() => {
       res.statusCode = 500
       res.end('internal server error')
     }
-  }).listen(port, (err) => {
-    if (err) throw err
+  })
+
+  server.listen(port, hostname, (err) => {
+    if (err) {
+      console.error('Failed to start server:', err)
+      process.exit(1)
+    }
     console.log(`> Ready on http://${hostname}:${port}`)
   })
+
+  // Graceful shutdown handling
+  process.on('SIGTERM', () => {
+    console.log('SIGTERM signal received: closing HTTP server')
+    if (server) {
+      server.close(() => {
+        console.log('HTTP server closed')
+        process.exit(0)
+      })
+    }
+  })
+
+  process.on('SIGINT', () => {
+    console.log('SIGINT signal received: closing HTTP server')
+    if (server) {
+      server.close(() => {
+        console.log('HTTP server closed')
+        process.exit(0)
+      })
+    }
+  })
+}).catch((err) => {
+  console.error('Failed to prepare Next.js app:', err)
+  process.exit(1)
 })
 
