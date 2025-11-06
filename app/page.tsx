@@ -77,7 +77,7 @@ export default function Home() {
   const handleCopyCA = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const caAddress = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+    const caAddress = "2zPhX7WhgoRUztDhcMEeMT6tjqmvCqWHDV1je4kppump";
     try {
       await navigator.clipboard.writeText(caAddress);
       setCopied(true);
@@ -163,7 +163,7 @@ export default function Home() {
         <div className="flex items-center gap-3 pointer-events-auto">
           {/* Pump.fun Button */}
           <a 
-            href="https://pump.fun" 
+            href="https://pump.fun/coin/2zPhX7WhgoRUztDhcMEeMT6tjqmvCqWHDV1je4kppump" 
             target="_blank" 
             rel="noopener noreferrer"
             className="p-2 hover:bg-gray-800/80 rounded-lg transition-colors bg-black/40 backdrop-blur-sm"
@@ -172,7 +172,7 @@ export default function Home() {
           </a>
           {/* X (Twitter) Button */}
           <a 
-            href="https://x.com" 
+            href="https://x.com/i/communities/1986509830656610772" 
             target="_blank" 
             rel="noopener noreferrer"
             className="p-1.5 hover:bg-gray-800/80 rounded-lg transition-colors bg-black/40 backdrop-blur-sm"
@@ -295,7 +295,7 @@ export default function Home() {
                     className="text-xs text-gray-400 hover:text-white transition-colors cursor-pointer text-left select-none pointer-events-auto"
                     type="button"
                   >
-                    {copied ? "Copied! ✓" : "CA : EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"}
+                    {copied ? "Copied! ✓" : "CA : 2zPhX7WhgoRUztDhcMEeMT6tjqmvCqWHDV1je4kppump"}
                   </button>
                 </div>
               </div>
